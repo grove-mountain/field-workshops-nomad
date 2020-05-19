@@ -24,7 +24,10 @@ challenges:
   title: The Nomad CLI
   teaser: Explore the Nomad Command Line Interface (CLI).
   assignment: |-
-    Let's start with some basic Nomad commands, running them in the "Nomad CLI" tab on the left.
+    Let's start with some basic Nomad commands. 
+
+    Select the "Nomad CLI" tab on the left and run the following:
+
     ```
     nomad version
     ```
@@ -70,11 +73,15 @@ challenges:
 
     We'll start out by running one in development mode. This mode is used to quickly start an agent that is acting as both a client and a server.
 
-    Start the agent in dev mode on the "Nomad Dev Server" tab:
+    Select the "Nomad Dev Server" tab.
+
+    Start the agent in dev mode:
     ```
     nomad agent -dev -bind=0.0.0.0 &
     ```
     Running the above command will output some log data and run in the background (because of the `&`). We included the `-bind=0.0.0.0` argument so that the Nomad UI can connect to the agent in the Instruqt environment.
+
+    Select the "Nomad CLI" tab.
 
     You'll run the rest of the Nomad commands in this challenge in the "Nomad CLI" tab to avoid intermixing of output from the agent and your commands.
 
@@ -120,6 +127,8 @@ challenges:
     In this challenge, you'll run your first Nomad job using a Nomad job specification file that has been provided.
 
     You'll first start and stop it with the Nomad CLI. You'll then do the same with the Nomad UI.
+
+    Select the "Nomad CLI" tab.
 
     First, inspect the job specification file, `redis.nomad`:
     ```
@@ -198,14 +207,16 @@ challenges:
   assignment: |-
     In this challenge, you'll run the same Nomad job using Nomad's HTTP API.
 
-    First, generate a JSON representation of the job from the redis.nomad file that can be sent to the HTTP API. Execute the following on the "Nomad CLI" tab:
+    Select the "Nomad CLI" tab.
+
+    First, generate a JSON representation of the job from the redis.nomad file that can be sent to the HTTP API:
     ```
     nomad job run -output redis.nomad > payload.json
     ```
 
     Run the following `curl` command against the Nomad server's HTTP API to create the job from the payload.json file. We use the `jq` program to make the response easier to read.
     ```
-    curl --data @payload.json http://localhost:4646/v1/jobs | jq
+    curl -s --data @payload.json http://localhost:4646/v1/jobs | jq
     ```
     The JSON data returned will include a job index, and evaluation ID, and other information.
 
@@ -213,7 +224,7 @@ challenges:
 
     With the job running, we can use Nomad's HTTP API to query the job status:
     ```
-    curl http://localhost:4646/v1/job/redis/summary | jq
+    curl -s http://localhost:4646/v1/job/redis/summary | jq
     ```
     Note that the JSON response includes the job ID ("redis") and counts for the numbers of allocations failed, started, running, etc.
 
@@ -221,7 +232,7 @@ challenges:
 
     Finally, let's use the HTTP API to stop the job:
     ```
-    curl --request DELETE http://localhost:4646/v1/job/redis | jq
+    curl -s --request DELETE http://localhost:4646/v1/job/redis | jq
     ```
     The JSON data returned will include a job index, and evaluation ID, and other information.
 
@@ -229,7 +240,7 @@ challenges:
 
     To ensure that the job has been properly terminated, query the job summary API again:
     ```
-    curl http://localhost:4646/v1/job/redis/summary | jq
+    curl -s http://localhost:4646/v1/job/redis/summary | jq
     ```
     The JSON response should show that no jobs are currently running and that the number of complete jobs has increased by 1.
   notes:
